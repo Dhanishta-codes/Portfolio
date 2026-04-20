@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Groww: The Engagement Paradox — Dhanishta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=DM+Mono:ital,wght@0,300;0,400;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root,
+        [data-theme="dark"] {
+            --bg: #0A0A0A;
+            --bg2: #111111;
+            --surface: #1A1A1A;
+            --border: #2A2A2A;
+            --text: #F5F5F5;
+            --text-muted: #666666;
+            --text-dim: #3A3A3A;
+            --accent: #E07A3A;
+            --accent2: #B85C1A;
+            --red: #EF4444;
+            --green: #4ADE80;
+            --green-glow: rgba(74, 222, 128, .12);
+            --font-display: 'Instrument Serif', serif;
+            --font-body: 'Lora', serif;
+            --font-ui: 'Inter', sans-serif;
+            --font-mono: 'DM Mono', monospace;
+        }
+
+        [data-theme="light"] {
+            --bg: #EFEDEA;
+            --bg2: #E8E5E1;
+            --surface: #DDD9D4;
+            --border: #C8C3BC;
+            --text: #1A1A1A;
+            --text-muted: #6B6560;
+            --text-dim: #B0AAA4;
+            --accent: #B85C1A;
+            --accent2: #8B4010;
+            --red: #C0392B;
+            --green: #2D7A4F;
+            --green-glow: rgba(45, 122, 79, .12);
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-ui);
+            font-size: 18px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            cursor: none;
+            transition: background .8s ease, color .5s ease;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            cursor: none;
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+            * {
+                animation-duration: .001ms !important;
+                transition-duration: .001ms !important;
+            }
+        }
+
+        #cursor {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            border-radius: 0;
+            transition: width .2s ease, height .2s ease, background .2s ease;
+        }
+
+        #cursorTrail {
+            display: none !important;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 28px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            background: rgba(10, 10, 10, .85);
+            backdrop-filter: blur(8px);
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(239, 237, 234, .85);
+        }
+
+        .nav-logo {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-name {
+            font-family: "Times New Roman", Georgia, serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0;
+            color: var(--text);
+            transition: color .5s ease;
+        }
+
+        .nav-subtitle {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: .015em;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-top: 2px;
+        }
+
+        .nav-items {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-ui);
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            position: relative;
+            transition: color .3s ease;
+        }
+
+        .nav-item:hover {
+            color: var(--text);
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width .3s ease;
+        }
+
+        .nav-item:hover::after {
+            width: 100%;
+        }
+
+        .n-sym {
+            font-size: 11px;
+            display: inline-block;
+            transition: transform .4s ease;
+        }
+
+        .nav-roles {
+            color: var(--green) !important;
+        }
+
+        .nav-roles::after {
+            background: var(--green);
+        }
+
+        .n-roles-txt {
+            animation: breathe 3s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+
+            0%,
+            100% {
+                text-shadow: none;
+                opacity: 1;
+            }
+
+            50% {
+                text-shadow: 0 0 20px var(--green), 0 0 40px var(--green-glow);
+                opacity: .85;
+            }
+        }
+
+        .pdot {
+            width: 7px;
+            height: 7px;
+            background: var(--green);
+            border-radius: 50%;
+            position: relative;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .pdot::before,
+        .pdot::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: var(--green);
+            animation: sonar 2.5s ease-out infinite;
+        }
+
+        .pdot::after {
+            animation-delay: 1.25s;
+        }
+
+        @keyframes sonar {
+            0% {
+                transform: scale(1);
+                opacity: .8;
+            }
+
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        .back-nav {
+            padding: 120px 48px 0;
+        }
+
+        .back-btn {
+            font-family: var(--font-ui);
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color .3s ease, gap .3s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--accent);
+            gap: 4px;
+        }
+
+        .pg-hdr {
+            padding: 60px 48px 80px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 40px;
+            border-bottom: 1px solid var(--border);
+            align-items: end;
+        }
+
+        .pg-eye {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            font-family: var(--font-ui);
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .pe-dash {
+            display: inline-block;
+            width: 0;
+            height: 1px;
+            background: var(--text-muted);
+            vertical-align: middle;
+            transition: width .35s ease, margin-right .35s ease;
+        }
+
+        .pe-dash.open {
+            width: 32px;
+            margin-right: 14px;
+        }
+
+        .pg-title {
+            font-family: "Playfair Display", serif;
+            font-size: clamp(48px, 7vw, 96px);
+            font-weight: 700;
+            line-height: .95;
+            margin-bottom: 24px;
+            color: var(--text);
+            transition: color .5s ease;
+        }
+
+        .pg-sub {
+            font-family: var(--font-body);
+            font-style: italic;
+            font-size: 20px;
+            color: var(--text-muted);
+            max-width: 560px;
+            line-height: 1.5;
+        }
+
+        .pg-meta {
+            text-align: right;
+        }
+
+        .m-lbl {
+            font-family: var(--font-ui);
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+        }
+
+        .m-val {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            width: calc(100% - 96px);
+            max-width: 1760px;
+            margin: 32px 48px 0;
+            overflow: hidden;
+            transition: background .8s ease, border-color .5s ease;
+        }
+
+        .stat {
+            padding: 32px 36px;
+            border-right: 1px solid var(--border);
+        }
+
+        .stat:last-child {
+            border-right: none;
+        }
+
+        .s-lbl {
+            font-family: var(--font-ui);
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .s-val {
+            font-family: var(--font-display);
+            font-size: 36px;
+            font-weight: 400;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .tags {
+            padding: 28px 48px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tag {
+            font-family: var(--font-ui);
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            padding: 7px 16px;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            transition: border-color .3s ease, color .3s ease;
+        }
+
+        .tag:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .disclaimer {
+            padding: 14px 48px;
+            font-family: var(--font-ui);
+            font-size: 9px;
+            letter-spacing: .08em;
+            font-style: italic;
+            color: var(--text-dim);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .csec {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 80px;
+            padding: 80px 48px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .c-lbl {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            font-family: var(--font-ui);
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding-top: 4px;
+        }
+
+        .cl-dash {
+            display: inline-block;
+            width: 0;
+            height: 1px;
+            background: var(--text-muted);
+            vertical-align: middle;
+            transition: width .35s ease, margin-right .35s ease;
+        }
+
+        .cl-dash.open {
+            width: 24px;
+            margin-right: 12px;
+        }
+
+        .cbody {
+            font-family: var(--font-body);
+            font-size: 19px;
+            line-height: 1.8;
+            color: var(--text-muted);
+        }
+
+        .cbody p {
+            margin-bottom: 24px;
+        }
+
+        .cbody p:last-child {
+            margin-bottom: 0;
+        }
+
+        .cbody strong {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .cbody h3 {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 10px;
+            margin-top: 28px;
+        }
+
+        .cbody h3:first-child {
+            margin-top: 0;
+        }
+
+        .loop-flow {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0;
+            margin: 32px 0;
+        }
+
+        .loop-step {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 12px 18px;
+            font-family: var(--font-ui);
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .loop-arr {
+            font-size: 13px;
+            color: var(--text-dim);
+            padding: 0 6px;
+        }
+
+        .loop-fork {
+            font-family: var(--font-ui);
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--red);
+            border: 1px dashed var(--red);
+            padding: 8px 16px;
+            margin-top: 16px;
+            display: inline-block;
+        }
+
+        .prob-cards,
+        .sol-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .prob-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--red);
+            padding: 28px 32px;
+        }
+
+        .sol-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent2);
+            padding: 28px 32px;
+        }
+
+        .pn,
+        .sn {
+            font-family: var(--font-ui);
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 12px;
+        }
+
+        .pt {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .st {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .pb,
+        .sb {
+            font-family: var(--font-body);
+            font-size: 17px;
+            line-height: 1.7;
+            color: var(--text-muted);
+        }
+
+        .pb strong {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .sb strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .psig {
+            font-family: var(--font-ui);
+            font-size: 10px;
+            letter-spacing: .06em;
+            font-style: italic;
+            color: var(--text-dim);
+            margin-top: 16px;
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+
+        .smet {
+            font-family: var(--font-ui);
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--green);
+            margin-top: 16px;
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+
+        .next-case {
+            padding: 80px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .nc-lbl {
+            font-family: var(--font-ui);
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .nc-cat {
+            font-family: var(--font-ui);
+            font-size: 10px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+        }
+
+        .nc-ttl {
+            font-family: var(--font-display);
+            font-size: clamp(26px, 3.5vw, 46px);
+            font-weight: 400;
+            color: var(--text);
+            display: block;
+            transition: color .3s ease;
+        }
+
+        .nc-ttl:hover {
+            color: var(--accent);
+        }
+
+        .back-link {
+            font-family: var(--font-ui);
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 12px 24px;
+            transition: border-color .3s ease, color .3s ease;
+        }
+
+        .back-link:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        #clock {
+            position: fixed;
+            bottom: 28px;
+            left: 48px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 300;
+            letter-spacing: .15em;
+            color: var(--text-dim);
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        #toggle {
+            position: fixed;
+            bottom: 24px;
+            right: 48px;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            padding: 7px 12px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            transition: border-color .3s ease, background .8s ease;
+        }
+
+        #toggle:hover {
+            border-color: var(--accent);
+        }
+
+        .tsym {
+            font-size: 14px;
+            color: var(--text-dim);
+            padding: 0 5px;
+            line-height: 1;
+            display: inline-block;
+            transition: color .3s ease;
+        }
+
+        .tsym.ton {
+            color: var(--accent);
+        }
+
+        #tind {
+            position: absolute;
+            bottom: 3px;
+            height: 2px;
+            width: 22px;
+            background: var(--accent);
+            transition: left .3s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .fbar {
+            border-top: 1px solid var(--border);
+            padding: 24px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fcopy {
+            font-family: var(--font-ui);
+            font-size: 9px;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        .fopen {
+            font-family: var(--font-ui);
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rev {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity .8s ease, transform .8s ease;
+        }
+
+        .rev.on {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cursor"></div>
+    <div id="cursorTrail"></div>
+    <nav>
+        <div class="nav-logo">
+            <a href="index.html" class="nav-name">Dhanishta<span class="nav-subtitle">– Product & Strategy</span></a>
+        </div>
+        <div class="nav-items">
+            <a href="index.html" class="nav-item"><span class="n-sym">↗</span> Index</a>
+            <a href="index.html#teardowns" class="nav-item"><span class="n-sym">↗</span> What I Found</a>
+            <a href="index.html#contact" class="nav-item nav-roles"><span class="pdot"></span><span
+                    class="n-roles-txt">Open to Roles</span></a>
+        </div>
+    </nav>
+    <div class="back-nav"><a href="index.html#teardowns" class="back-btn">← Back to Teardowns</a></div>
+
+    <div class="pg-hdr rev">
+        <div>
+            <div class="pg-eye"><span class="pe-dash" id="peDash"></span><span id="peText"></span></div>
+            <h1 class="pg-title">Groww: The<br>Engagement Paradox</h1>
+            <p class="pg-sub">How Groww acquired 100M+ users on simplicity — and is now trapped by it.</p>
+        </div>
+        <div class="pg-meta">
+            <div class="m-lbl">Company</div>
+            <div class="m-val">Groww</div>
+            <div class="m-lbl">Sector</div>
+            <div class="m-val" style="font-size:15px">Fintech</div>
+        </div>
+    </div>
+
+    <div class="stats-bar rev">
+        <div class="stat">
+            <div class="s-lbl">Registered Users</div>
+            <div class="s-val">100M+</div>
+        </div>
+        <div class="stat">
+            <div class="s-lbl">Active Traders</div>
+            <div class="s-val" data-count="11" data-suffix="M">11M</div>
+        </div>
+        <div class="stat">
+            <div class="s-lbl">Revenue Streams</div>
+            <div class="s-val" data-count="4" data-suffix="">4</div>
+        </div>
+        <div class="stat">
+            <div class="s-lbl">Analysis Period</div>
+            <div class="s-val" style="font-size:18px">Q2'24–Q1'25</div>
+        </div>
+    </div>
+
+    <div class="tags rev">
+        <span class="tag">Monetization</span><span class="tag">GTM Strategy</span>
+        <span class="tag">Retention</span><span class="tag">Unit Economics</span><span class="tag">Platform
+            Dynamics</span>
+    </div>
+    <div class="disclaimer">Independent analysis. Not affiliated with Groww.</div>
+
+    <div class="csec rev">
+        <div class="c-lbl"><span class="cl-dash" id="cl1"></span><span id="ct1"></span></div>
+        <div class="cbody">
+            <h3>Brokerage</h3>
+            <p>Flat ₹20/trade on F&O and intraday. Zero on delivery equity. Core revenue. Dependent on trading
+                frequency.</p>
+            <h3>Mutual Funds</h3>
+            <p>Trail commission from AMCs (0.3–0.5% of AUM annually). Passive income. Grows with market, not user
+                activity.</p>
+            <h3>Groww Pay (UPI)</h3>
+            <p>Transaction float, potential lending infrastructure. Early stage. MDR nearly zero. Strategic bet.</p>
+            <h3>Credit & Insurance Distribution</h3>
+            <p>Referral fees from lending/insurance partners. Low penetration. High margin if scaled.</p>
+            <p><strong>Active F&O traders fund the platform disproportionately.</strong> The 11% active users subsidize
+                the 89% dormant ones.</p>
+        </div>
+    </div>
+
+    <div class="csec rev">
+        <div class="c-lbl"><span class="cl-dash" id="cl2"></span><span id="ct2"></span></div>
+        <div class="cbody">
+            <div class="loop-flow">
+                <div class="loop-step">Market Buzz</div>
+                <div class="loop-arr">→</div>
+                <div class="loop-step">Download</div>
+                <div class="loop-arr">→</div>
+                <div class="loop-step">First SIP</div>
+                <div class="loop-arr">→</div>
+                <div class="loop-step">Check Returns</div>
+                <div class="loop-arr">→</div>
+                <div class="loop-step">Try Stocks</div>
+                <div class="loop-arr">→</div>
+                <div class="loop-step">Try F&O</div>
+            </div>
+            <div class="loop-fork">⚠ FATAL FORK: Serious traders hit complexity ceiling → migrate to Zerodha / Dhan
+            </div>
+            <p style="margin-top:24px"><strong>Groww built a perfect on-ramp with no highway.</strong> Users arrive via
+                SIP simplicity → want more → either accept limitations, or migrate to Zerodha for serious trading. Groww
+                loses its most valuable users at peak monetization potential.</p>
+        </div>
+    </div>
+
+    <div class="csec rev">
+        <div class="c-lbl"><span class="cl-dash" id="cl3"></span><span id="ct3"></span></div>
+        <div class="prob-cards">
+            <div class="prob-card">
+                <div class="pn">Problem 01</div>
+                <div class="pt">89% of Users Generate Near-Zero Revenue</div>
+                <div class="pb">A ₹2000/month SIP generates roughly <strong>₹8–12/year in trail commission.</strong>
+                    Groww needs 1000 SIP users to earn what one active F&O trader generates in a month. The acquisition
+                    engine is world-class. The monetization engine is broken.</div>
+            </div>
+            <div class="prob-card">
+                <div class="pn">Problem 02</div>
+                <div class="pt">Complexity Ceiling Drives High-Value User Churn</div>
+                <div class="pb">Groww's charting tools and portfolio analytics are built for beginners. Users who
+                    graduate to active trading consistently cite platform limitations as reason to switch. <strong>Groww
+                        is spending CAC to acquire users, nurturing them into high-value traders, then watching Zerodha
+                        harvest them.</strong></div>
+                <div class="psig">Signal: Zerodha still leads active trader market share despite Groww's 10x user base
+                    advantage.</div>
+            </div>
+            <div class="prob-card">
+                <div class="pn">Problem 03</div>
+                <div class="pt">Groww Pay Has No Retention Hook</div>
+                <div class="pb">No cashback moat, no merchant network advantage, no credit integration creating
+                    switching cost. <strong>It's a feature dressed as a strategy.</strong> Users who invest on Groww
+                    still pay bills on PhonePe. The financial super-app vision requires cross-product stickiness that
+                    doesn't exist yet.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="csec rev">
+        <div class="c-lbl"><span class="cl-dash" id="cl4"></span><span id="ct4"></span></div>
+        <div class="sol-cards">
+            <div class="sol-card">
+                <div class="sn">Feature 01</div>
+                <div class="st">Groww Pro — Progressive Complexity Unlock</div>
+                <div class="sb">When a user's trading volume crosses <strong>₹50,000/month for 2 consecutive
+                        months,</strong> auto-offer Groww Pro — advanced charting (TradingView integration), basket
+                    orders, P&L analytics, options chain. Free for 3 months, then ₹99/month.</div>
+                <div class="smet">Measure: 90-day retention of users crossing ₹50K monthly volume → target improvement
+                    from ~40% to 65%</div>
+            </div>
+            <div class="sol-card">
+                <div class="sn">Feature 02</div>
+                <div class="st">Groww Score — Unified Financial Identity</div>
+                <div class="sb">Single score across investments + UPI spends + credit behavior. Every Groww Pay
+                    transaction feeds the score. Score unlocks better <strong>loan rates and insurance
+                        premiums.</strong> Creates a concrete reason to use Groww Pay over PhonePe.</div>
+                <div class="smet">Measure: Groww Pay 30-day active rate among existing investors → target 25% crossover
+                    within 6 months of launch</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="next-case rev">
+        <div>
+            <div class="nc-lbl">Next Teardown</div>
+            <div class="nc-cat">Food Tech</div>
+            <a href="teardown-zomato.html" class="nc-ttl">Zomato: The Monetization Trap →</a>
+        </div>
+        <a href="index.html#teardowns" class="back-link">← All Teardowns</a>
+    </div>
+
+    <div class="fbar">
+        <span class="fcopy">© 2026 Dhanishta — All thinking, some shipping.</span>
+        <div class="fopen"><span class="pdot" style="width:5px;height:5px;"></span> Open to Roles</div>
+    </div>
+    <div id="clock"></div>
+    <div id="toggle" style="position:fixed;"><span class="tsym ton" id="tmoon">☽</span><span class="tsym"
+            id="tsun">☀</span><span id="tind"></span></div>
+
+    <script>
+        const C = document.getElementById('cursor'), T = document.getElementById('cursorTrail');
+        let mx = 0, my = 0, tx = 0, ty = 0;
+        document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; C.style.left = mx + 'px'; C.style.top = my + 'px'; });
+        (function lp() { tx += (mx - tx) * .12; ty += (my - ty) * .12; T.style.left = tx + 'px'; T.style.top = ty + 'px'; requestAnimationFrame(lp); })();
+        document.querySelectorAll('.nav-item').forEach(it => { const s = it.querySelector('.n-sym'); if (!s) return; it.addEventListener('mouseenter', () => s.style.transform = 'rotate(360deg)'); it.addEventListener('mouseleave', () => s.style.transform = 'rotate(0deg)'); });
+        const ro = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); }), { threshold: .08 });
+        document.querySelectorAll('.rev').forEach(el => ro.observe(el));
+        const pgHdr = document.querySelector('.pg-hdr');
+        new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting && !document.getElementById('peDash').dataset.p) { document.getElementById('peDash').dataset.p = '1'; document.getElementById('peDash').classList.add('open'); setTimeout(() => { let i = 0, label = 'PRODUCT TEARDOWN', txt = document.getElementById('peText'); const iv = setInterval(() => { txt.textContent += label[i]; i++; if (i >= label.length) clearInterval(iv); }, 40); }, 360); } }); }, { threshold: .3 }).observe(pgHdr);
+        const clabels = [{ d: 'cl1', t: 'ct1', l: '(01) — THE PRODUCT' }, { d: 'cl2', t: 'ct2', l: '(02) — CORE LOOP' }, { d: 'cl3', t: 'ct3', l: '(03) — 3 PROBLEMS' }, { d: 'cl4', t: 'ct4', l: '(04) — SOLUTION' }];
+        clabels.forEach(({ d, t, l }) => { const dash = document.getElementById(d), txt = document.getElementById(t), sec = dash.closest('.csec'); new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting && !dash.dataset.p) { dash.dataset.p = '1'; dash.classList.add('open'); setTimeout(() => { let i = 0; const iv = setInterval(() => { txt.textContent += l[i]; i++; if (i >= l.length) clearInterval(iv); }, 40); }, 360); } }); }, { threshold: .3 }).observe(sec); });
+        const sb = document.querySelector('.stats-bar');
+        new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting && !sb.dataset.counted) { sb.dataset.counted = '1'; sb.querySelectorAll('.s-val[data-count]').forEach(el => { const tgt = parseFloat(el.dataset.count), suf = el.dataset.suffix || '', dur = 1200, t0 = performance.now(), eo = t => 1 - Math.pow(1 - t, 3); (function tk(now) { const t = Math.min((now - t0) / dur, 1), v = Math.round(eo(t) * tgt); el.textContent = v + suf; if (t < 1) requestAnimationFrame(tk); else el.textContent = tgt + suf; })(performance.now()); }); } }); }, { threshold: .3 }).observe(sb);
+        const ck = document.getElementById('clock'); function upCk() { const n = new Date(), h = n.getHours(), m = String(n.getMinutes()).padStart(2, '0'), s = String(n.getSeconds()).padStart(2, '0'), ap = h >= 12 ? 'PM' : 'AM', h2 = String(h % 12 || 12).padStart(2, '0'); ck.textContent = `${h2}:${m}:${s} ${ap} IST`; } upCk(); setInterval(upCk, 1000);
+        const tog = document.getElementById('toggle'), moon = document.getElementById('tmoon'), sun = document.getElementById('tsun'), ind = document.getElementById('tind'); let dark = localStorage.getItem('theme') !== 'light'; function applyTheme() { document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light'); moon.classList.toggle('ton', dark); sun.classList.toggle('ton', !dark); setTimeout(() => { ind.style.left = (dark ? moon.offsetLeft : sun.offsetLeft) + 'px'; }, 10); } applyTheme(); tog.addEventListener('click', () => { dark = !dark; localStorage.setItem('theme', dark ? 'dark' : 'light'); applyTheme(); });
+    </script>
+</body>
+
+</html>
