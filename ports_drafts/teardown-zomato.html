@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zomato: The Monetization Trap — Dhanishta Likhar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0A0A0A; --surface: #1A1A1A; --border: #2A2A2A; --text: #F0EDE8; --text-muted: #666666; --text-dim: #3A3A3A; --accent: #E8D5B0; --accent2: #C8A96E; --red: #EF4444; --green: #4ADE80; --font-display: 'Playfair Display', serif; --font-body: 'Cormorant Garamond', serif; --font-mono: 'DM Mono', monospace; }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 18px; line-height: 1.6; overflow-x: hidden; cursor: none; }
+  .cursor { position: fixed; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); mix-blend-mode: difference; }
+  .cursor-trail { position: fixed; width: 32px; height: 32px; border: 1px solid rgba(232,213,176,0.3); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 28px 48px; display: flex; justify-content: space-between; align-items: flex-start; }
+  .nav-brand { display: flex; flex-direction: column; }
+  .nav-name { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); text-decoration: none; }
+  .nav-sub { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; margin-top: 3px; }
+  .nav-items { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-muted); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; transition: color 0.3s ease; cursor: none; }
+  .nav-item:hover { color: var(--text); }
+  .nav-symbol { font-size: 12px; transition: transform 0.4s ease; }
+  .pulse-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; position: relative; display: inline-block; }
+  .pulse-dot::before, .pulse-dot::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: var(--green); animation: sonar 2.5s ease-out infinite; }
+  .pulse-dot::after { animation-delay: 1.25s; }
+  @keyframes sonar { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(4); opacity: 0; } }
+  .back-nav { padding: 120px 48px 0; }
+  .back-btn { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; color: var(--text-muted); text-decoration: none; text-transform: uppercase; display: flex; align-items: center; gap: 8px; transition: color 0.3s ease; cursor: none; }
+  .back-btn:hover { color: var(--accent); }
+  .page-header { padding: 60px 48px 80px; display: grid; grid-template-columns: 1fr auto; gap: 40px; border-bottom: 1px solid var(--border); }
+  .page-eyebrow { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; }
+  .page-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--text-muted); }
+  .page-title { font-family: var(--font-display); font-size: clamp(40px, 6vw, 84px); font-weight: 900; line-height: 0.95; margin-bottom: 24px; }
+  .page-subtitle { font-family: var(--font-body); font-style: italic; font-size: 20px; color: var(--text-muted); max-width: 560px; line-height: 1.5; }
+  .page-meta { text-align: right; }
+  .meta-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; }
+  .meta-value { font-family: var(--font-display); font-size: 20px; font-weight: 700; }
+  .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--surface); border-bottom: 1px solid var(--border); }
+  .stat { padding: 36px 40px; border-right: 1px solid var(--border); }
+  .stat:last-child { border-right: none; }
+  .stat-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; }
+  .stat-value { font-family: var(--font-display); font-size: 36px; font-weight: 900; color: var(--accent); }
+  .tags { padding: 28px 48px; display: flex; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+  .tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 7px 16px; border: 1px solid var(--border); color: var(--text-muted); }
+  .disclaimer { padding: 14px 48px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--text-dim); border-bottom: 1px solid var(--border); font-style: italic; }
+  .content-section { display: grid; grid-template-columns: 280px 1fr; gap: 80px; padding: 80px 48px; border-bottom: 1px solid var(--border); }
+  .content-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; display: flex; align-items: center; gap: 16px; padding-top: 4px; }
+  .content-label::before { content: ''; width: 24px; height: 1px; background: var(--text-muted); }
+  .content-body { font-size: 19px; line-height: 1.8; color: var(--text-muted); }
+  .content-body p { margin-bottom: 24px; }
+  .content-body p:last-child { margin-bottom: 0; }
+  .content-body strong { color: var(--accent); font-weight: 600; }
+  .content-body h3 { font-family: var(--font-display); font-size: 22px; color: var(--text); margin-bottom: 12px; margin-top: 32px; }
+  .content-body h3:first-child { margin-top: 0; }
+
+  /* CORE LOOP */
+  .loop-flow { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin: 32px 0; }
+  .loop-step { background: var(--surface); border: 1px solid var(--border); padding: 14px 20px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--text-muted); text-transform: uppercase; }
+  .loop-arrow { font-size: 14px; color: var(--text-dim); padding: 0 8px; }
+
+  /* PROBLEM CARDS */
+  .problem-cards { display: flex; flex-direction: column; gap: 16px; }
+  .problem-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--red); padding: 28px 32px; transition: border-color 0.3s ease; }
+  .problem-card:hover { border-color: var(--red); }
+  .problem-num { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 12px; }
+  .problem-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+  .problem-body { font-size: 17px; line-height: 1.7; color: var(--text-muted); }
+  .problem-body strong { color: var(--accent); }
+  .problem-signal { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; color: var(--text-dim); margin-top: 16px; font-style: italic; border-top: 1px solid var(--border); padding-top: 16px; }
+
+  /* SOLUTION CARDS */
+  .solution-cards { display: flex; flex-direction: column; gap: 16px; }
+  .solution-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent2); padding: 28px 32px; }
+  .solution-card:hover { border-color: var(--accent2); }
+  .solution-num { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 12px; }
+  .solution-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--accent); margin-bottom: 16px; }
+  .solution-body { font-size: 17px; line-height: 1.7; color: var(--text-muted); }
+  .solution-body strong { color: var(--text); }
+  .solution-metric { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; color: var(--green); margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px; }
+
+  .next-case { padding: 80px 48px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); }
+  .next-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; }
+  .next-category { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; }
+  .next-title { font-family: var(--font-display); font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: var(--text); text-decoration: none; display: block; transition: color 0.3s ease; }
+  .next-title:hover { color: var(--accent); }
+  .back-link { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; color: var(--text-muted); text-decoration: none; text-transform: uppercase; border: 1px solid var(--border); padding: 12px 24px; transition: border-color 0.3s ease, color 0.3s ease; cursor: none; }
+  .back-link:hover { border-color: var(--accent); color: var(--accent); }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Detail-page frame: keeps non-index pages aligned to the metric-box width. */
+  :root { --page-max: 1120px; --page-pad: 48px; }
+  .back-nav,
+  .page-header,
+  .stats-bar,
+  .tags,
+  .disclaimer,
+  .content-section,
+  .next-case {
+    width: min(var(--page-max), calc(100% - var(--page-pad) * 2));
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .back-nav { padding: 120px 0 0; }
+  .page-header { padding: 60px 0 80px; align-items: end; }
+  .tags { padding: 24px 0; display: flex; gap: 12px; flex-wrap: wrap; border: none; border-bottom: 1px solid var(--border); border-radius: 0; overflow: visible; background: transparent; }
+  .tag { display: inline-flex; align-items: center; justify-content: center; min-height: auto; width: auto; text-align: center; padding: 7px 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 9px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
+  .tag + .tag { border-left: 1px solid var(--border); }
+  .disclaimer { padding: 18px 0; font-size: 12px; line-height: 1.6; letter-spacing: 0.08em; color: var(--text-muted); }
+  .content-section { grid-template-columns: 260px 1fr; gap: 76px; padding: 84px 0; }
+  .next-case { padding: 80px 0; }
+  @media (max-width: 860px) {
+    :root { --page-pad: 24px; }
+    body { cursor: auto; }
+    .cursor, .cursor-trail { display: none; }
+    .page-header, .content-section { grid-template-columns: 1fr; gap: 32px; }
+    .page-meta { text-align: left; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(2) { border-right: none; }
+    .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--border); }
+    .next-case { flex-direction: column; align-items: flex-start; gap: 32px; }
+  }
+  @media (max-width: 560px) {
+    :root { --page-pad: 18px; }
+    nav { padding: 22px 18px; }
+    .nav-items { display: none; }
+    .stats-bar { grid-template-columns: 1fr; }
+    .stat { border-right: none; border-bottom: 1px solid var(--border); }
+    .stat:last-child { border-bottom: none; }
+    .tags { display: flex; }
+    .tag + .tag { border-left: 1px solid var(--border); border-top: none; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+<nav>
+  <div class="nav-brand">
+    <a href="index.html" class="nav-name">Dhanishta Likhar</a>
+    <span class="nav-sub">Product & Strategy</span>
+  </div>
+  <div class="nav-items">
+    <a href="index.html" class="nav-item"><span class="nav-symbol">↗</span> Index</a>
+    <a href="teardowns.html" class="nav-item"><span class="nav-symbol">◎</span> What I Found</a>
+    <a href="index.html#contact" class="nav-item" style="color: var(--green);"><span class="pulse-dot"></span><span class="nav-symbol">●</span> Open to Roles</a>
+  </div>
+</nav>
+
+<div class="back-nav"><a href="teardowns.html" class="back-btn">← Back to Teardowns</a></div>
+
+<div class="page-header reveal">
+  <div>
+    <div class="page-eyebrow">Product Teardown</div>
+    <h1 class="page-title">Zomato: The<br>Monetization Trap</h1>
+    <p class="page-subtitle">How Zomato built a ₹12,000Cr revenue engine on a model that punishes its own supply side.</p>
+  </div>
+  <div class="page-meta">
+    <div class="meta-label">Company</div>
+    <div class="meta-value">Zomato</div>
+    <div class="meta-label" style="margin-top:16px">Sector</div>
+    <div class="meta-value" style="font-size:16px">Food Tech</div>
+  </div>
+</div>
+
+<div class="stats-bar reveal">
+  <div class="stat"><div class="stat-label">Revenue Streams</div><div class="stat-value">3</div></div>
+  <div class="stat"><div class="stat-label">Take Rate</div><div class="stat-value">18–25%</div></div>
+  <div class="stat"><div class="stat-label">User Cohorts</div><div class="stat-value">4</div></div>
+  <div class="stat"><div class="stat-label">Analysis Period</div><div class="stat-value" style="font-size:20px">Q3 '24–Q1 '25</div></div>
+</div>
+
+<div class="tags reveal">
+  <span class="tag">Monetization</span>
+  <span class="tag">GTM Strategy</span>
+  <span class="tag">Unit Economics</span>
+  <span class="tag">Platform Dynamics</span>
+</div>
+
+<div class="disclaimer">Independent analysis. Not affiliated with Zomato.</div>
+
+<div class="content-section reveal">
+  <div class="content-label">(01) — The Product</div>
+  <div class="content-body">
+    <h3>Food Delivery</h3>
+    <p>Commission from restaurants (18–25% per order), delivery fee from users, surge pricing. Core business. Most mature.</p>
+    <h3>Blinkit (Quick Commerce)</h3>
+    <p>Slot rental from dark store partners, per-order fee, ad inventory. Fastest growing. Different unit economics than food.</p>
+    <h3>Zomato Gold + Ads</h3>
+    <p>Subscription from users (₹299–₹399/yr), ad placement fees from restaurants wanting visibility. Recurring revenue. Low CAC.</p>
+    <p><strong>Zomato collects from all three without owning inventory.</strong> Restaurants fund the platform. Users fund convenience. Brands fund visibility.</p>
+  </div>
+</div>
+
+<div class="content-section reveal">
+  <div class="content-label">(02) — Core Loop</div>
+  <div class="content-body">
+    <div class="loop-flow">
+      <div class="loop-step">Hunger Trigger</div><div class="loop-arrow">→</div>
+      <div class="loop-step">Open App</div><div class="loop-arrow">→</div>
+      <div class="loop-step">Browse</div><div class="loop-arrow">→</div>
+      <div class="loop-step">Order</div><div class="loop-arrow">→</div>
+      <div class="loop-step">Delivery</div><div class="loop-arrow">→</div>
+      <div class="loop-step">Habit</div>
+    </div>
+    <p>Gold sits in the middle of this loop as an accelerant — free delivery removes friction, users order more frequently. <strong>But this is exactly where the model starts fighting itself.</strong></p>
+    <p>Gold users order more → restaurants serve more Gold orders at effectively lower margin → restaurants raise base prices → non-Gold users see higher prices → they either subscribe to Gold or churn.</p>
+    <p><strong>Zomato's retention tool is quietly inflating the prices that drive people away from the platform.</strong></p>
+  </div>
+</div>
+
+<div class="content-section reveal">
+  <div class="content-label">(03) — 3 Problems</div>
+  <div class="problem-cards">
+    <div class="problem-card">
+      <div class="problem-num">Problem 01</div>
+      <div class="problem-title">Take Rate Creates Supply-Side Churn</div>
+      <div class="problem-body">18–25% commission means a ₹300 order yields ₹54–75 to Zomato before delivery cost. For a restaurant with 60–65% food cost, this leaves nearly nothing. Result: quality restaurants either exit the platform, raise prices, or open dark kitchens. <strong>Zomato's best supply is actively building around it.</strong></div>
+      <div class="problem-signal">Signal: dark kitchen registrations on Swiggy grew 34% YoY in 2024 — restaurants learning to cut platform dependency.</div>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num">Problem 02</div>
+      <div class="problem-title">Gold Cannibalizes Full-Margin Orders</div>
+      <div class="problem-body">Gold gives users free delivery on orders above ₹149. Zomato absorbs delivery cost. But Gold users don't spend more per order — they just order more frequently at lower margin per transaction. <strong>The subscription converts price-sensitive users into high-frequency, low-margin users.</strong> LTV math only works if order frequency increase outpaces margin compression — no public evidence it does.</div>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num">Problem 03</div>
+      <div class="problem-title">Blinkit and Food Delivery Eat the Same Wallet</div>
+      <div class="problem-body">Blinkit's 10-minute delivery of snacks and groceries directly competes with Zomato food for the same impulse-hunger moment. A user who orders Blinkit chips at 4pm is less likely to order Zomato dinner at 8pm. <strong>Two business units, one stomach, no cannibalization firewall.</strong></div>
+      <div class="problem-signal">GTM gap: Zomato Gold doesn't extend to Blinkit. Same user, two separate loyalty experiences, zero cross-platform retention loop.</div>
+    </div>
+  </div>
+</div>
+
+<div class="content-section reveal">
+  <div class="content-label">(04) — Proposed Solution</div>
+  <div class="solution-cards">
+    <div class="solution-card">
+      <div class="solution-num">Feature 01</div>
+      <div class="solution-title">Tiered Commission Model</div>
+      <div class="solution-body">Replace flat 18–25% take rate with performance-tiered commission. Restaurants rated 4.3+ with 500+ monthly orders pay <strong>14%.</strong> New restaurants pay 20% for 90 days then qualify for tier review. Keeps quality supply on platform.</div>
+      <div class="solution-metric">Measure: 90-day restaurant retention rate → target improvement from ~68% to 80%</div>
+    </div>
+    <div class="solution-card">
+      <div class="solution-num">Feature 02</div>
+      <div class="solution-title">Zomato One — Unified Loyalty Layer</div>
+      <div class="solution-body">Merge Gold across Zomato + Blinkit into one "Zomato One" subscription at <strong>₹499/yr.</strong> Benefits unlock across both platforms. Cross-platform ordering data creates a unified demand signal. Closes the wallet-split problem.</div>
+      <div class="solution-metric">Measure: 6-month cross-platform order rate among Gold subscribers → target 40% active on both within 6 months</div>
+    </div>
+  </div>
+</div>
+
+<div class="next-case reveal">
+  <div>
+    <div class="next-label">Next Teardown</div>
+    <div class="next-category">Fintech</div>
+    <a href="teardown-groww.html" class="next-title">Groww: The Engagement Paradox →</a>
+  </div>
+  <a href="teardowns.html" class="back-link">← All Teardowns</a>
+</div>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const trail = document.getElementById('cursorTrail');
+  let mouseX = 0, mouseY = 0, trailX = 0, trailY = 0;
+  document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; cursor.style.left = mouseX + 'px'; cursor.style.top = mouseY + 'px'; });
+  function animateTrail() { trailX += (mouseX - trailX) * 0.12; trailY += (mouseY - trailY) * 0.12; trail.style.left = trailX + 'px'; trail.style.top = trailY + 'px'; requestAnimationFrame(animateTrail); }
+  animateTrail();
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

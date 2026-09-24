@@ -351,16 +351,11 @@
         }
 
         .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            width: calc(100% - 96px);
-            max-width: 1760px;
-            margin: 32px 48px 0;
-            overflow: hidden;
-            transition: background .8s ease, border-color .5s ease;
+            width : calc(100% - 96px);
+            max-width: 1120px;
+            margin: 32px auto 0;
+            position: relative;
+            z-index: 2;
         }
 
         .stat {
@@ -390,47 +385,65 @@
             line-height: 1;
         }
 
-        .tags {
-            padding: 28px 48px;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            border-bottom: 1px solid var(--border);
+        .tags{
+            width:calc(100% - 96px);
+            max-width:1120px;
+            margin:0 auto;
+            display:grid;
+            grid-template-columns:repeat(5,1fr);
+            border:1px solid var(--border);
+            border-top:none;
+            border-radius:0 0 18px 18px;
+            overflow:hidden;
         }
 
-        .tag {
-            font-family: var(--font-ui);
-            font-size: 9px;
-            font-weight: 500;
-            letter-spacing: .15em;
-            text-transform: uppercase;
-            padding: 7px 16px;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            transition: border-color .3s ease, color .3s ease;
+        .tag{
+            padding:28px 16px;
+            text-align:center;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:12px;
+            letter-spacing:.22em;
+            text-transform:uppercase;
+            color:var(--fg);
+            border-left:1px solid var(--border);
         }
 
-        .tag:hover {
-            border-color: var(--accent);
-            color: var(--accent);
+        .tag:first-child{
+            border-left:none;
         }
 
+        .tag:last-child{
+          border-right:none;
+        }
+
+        .tag:hover{
+                background:rgba(255,255,255,0.02);
+                color:var(--text);
+        }
         .disclaimer {
-            padding: 14px 48px;
+            width: calc(100% - 96px);
+            max-width: 1760px;
+            margin: 16px auto 0;
+            padding: 14px 0;
             font-family: var(--font-ui);
-            font-size: 9px;
-            letter-spacing: .08em;
+            font-size: 14px;
+            letter-spacing: .04em;
             font-style: italic;
             color: var(--text-dim);
             border-bottom: 1px solid var(--border);
+            line-height: 1.4;
         }
 
         .csec {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            gap: 80px;
-            padding: 80px 48px;
-            border-bottom: 1px solid var(--border);
+            display:grid;
+            grid-template-columns:260px minmax(0,920px);
+            justify-content:start;
+            gap:88px;
+            padding:88px 48px;
+            border-bottom:1px solid var(--border);
+            transition:border-color .5s ease;
         }
 
         .c-lbl {
@@ -743,6 +756,7 @@
         }
 
         .fopen {
+            position: relative;
             font-family: var(--font-ui);
             font-size: 9px;
             font-weight: 500;
@@ -752,7 +766,26 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            overflow: visible;
         }
+        .fopen .fopen-label{transition:opacity .12s ease}
+        .fopen::after{
+            content: attr(data-email);
+            position: absolute;
+            left: 0;
+            top: calc(100% + 8px);
+            font-family: var(--font-ui);
+            font-size: 12px;
+            letter-spacing: .02em;
+            color: var(--text-dim);
+            opacity: 0;
+            transition: opacity .15s ease, transform .15s ease;
+            transform: translateY(-4px);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .fopen:hover .fopen-label{opacity:0}
+        .fopen:hover::after{opacity:1;transform:none}
 
         .rev {
             opacity: 0;

@@ -390,25 +390,30 @@
             line-height: 1;
         }
 
-        .tags {
-            padding: 28px 48px;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            border-bottom: 1px solid var(--border);
+        .tag{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:18px 12px;
+            font-size:10px;
+            letter-spacing:.14em;
+            text-transform:uppercase;
+            border-right:1px solid var(--border);
         }
 
-        .tag {
-            font-family: var(--font-ui);
-            font-size: 9px;
-            font-weight: 500;
-            letter-spacing: .15em;
-            text-transform: uppercase;
-            padding: 7px 16px;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            transition: border-color .3s ease, color .3s ease;
+        .tag:last-child{
+          border-right:none;
         }
+
+        .tags{
+            width:calc(100% - 96px);
+            max-width:1120px;
+            margin:0 48px;
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(0,1fr));
+            border:1px solid var(--border);
+            border-top:none;
+}
 
         .tag:hover {
             border-color: var(--accent);
@@ -416,22 +421,28 @@
         }
 
         .disclaimer {
-            padding: 14px 48px;
+            width: calc(100% - 96px);
+            max-width: 1760px;
+            margin: 16px auto 0;
+            padding: 14px 0;
             font-family: var(--font-ui);
-            font-size: 9px;
+            font-size: 14px;
             font-weight: 400;
-            letter-spacing: .08em;
+            letter-spacing: .04em;
             font-style: italic;
             color: var(--text-dim);
             border-bottom: 1px solid var(--border);
+            line-height: 1.4;
         }
 
         .csec {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            gap: 80px;
-            padding: 80px 48px;
-            border-bottom: 1px solid var(--border);
+            display:grid;
+            grid-template-columns:260px minmax(0,920px);
+            justify-content:start;
+            gap:88px;
+            padding:88px 48px;
+            border-bottom:1px solid var(--border);
+            transition:border-color .5s ease;
         }
 
         .c-lbl {
@@ -747,6 +758,7 @@
         }
 
         .fopen {
+            position: relative;
             font-family: var(--font-ui);
             font-size: 9px;
             font-weight: 500;
@@ -756,7 +768,26 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            overflow: visible;
         }
+        .fopen .fopen-label{transition:opacity .12s ease}
+        .fopen::after{
+            content: attr(data-email);
+            position: absolute;
+            left: 0;
+            top: calc(100% + 8px);
+            font-family: var(--font-ui);
+            font-size: 12px;
+            letter-spacing: .02em;
+            color: var(--text-dim);
+            opacity: 0;
+            transition: opacity .15s ease, transform .15s ease;
+            transform: translateY(-4px);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .fopen:hover .fopen-label{opacity:0}
+        .fopen:hover::after{opacity:1;transform:none}
 
         .rev {
             opacity: 0;
@@ -932,7 +963,7 @@
 
     <div class="fbar">
         <span class="fcopy">© 2026 Dhanishta — All thinking, some shipping.</span>
-        <div class="fopen"><span class="pdot" style="width:5px;height:5px;"></span> Open to Roles</div>
+        <div class="fopen" data-email="dhanishtalikhar06@gmail.com"><span class="pdot" style="width:5px;height:5px;"></span> <span class="fopen-label">Open to Roles</span></div>
     </div>
     <div id="clock"></div>
     <div id="toggle" style="position:fixed;"><span class="tsym ton" id="tmoon">☽</span><span class="tsym"

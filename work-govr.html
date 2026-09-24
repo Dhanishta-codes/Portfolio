@@ -357,7 +357,7 @@
             border-radius: 18px;
             width: calc(100% - 96px);
             max-width: 1760px;
-            margin: 32px 48px 0;
+            margin: 32px auto 0;
             overflow: hidden;
             transition: background .8s ease, border-color .5s ease;
         }
@@ -389,37 +389,44 @@
             line-height: 1;
         }
 
-        .tags {
-            padding: 28px 48px;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            border-bottom: 1px solid var(--border);
+        .tags{
+            width:calc(100% - 96px);
+            max-width:1120px;
+            margin:0 auto;
+            display:grid;
+            grid-template-columns:repeat(5,1fr);
+            border:1px solid var(--border);
+            border-top:none;
         }
 
-        .tag {
-            font-family: var(--font-ui);
-            font-size: 9px;
-            font-weight: 500;
-            letter-spacing: .15em;
-            text-transform: uppercase;
-            padding: 7px 16px;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            transition: border-color .3s ease, color .3s ease;
+        .tag{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:18px 12px;
+            font-size:10px;
+            letter-spacing:.14em;
+            text-transform:uppercase;
+            border-right:1px solid var(--border);
         }
 
-        .tag:hover {
-            border-color: var(--accent);
-            color: var(--accent);
+        .tag:last-child{
+          border-right:none;
+        }
+
+        .tag:hover{
+            background:rgba(255,255,255,0.02);
+            color:var(--text);
         }
 
         .csec {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            gap: 80px;
-            padding: 80px 48px;
-            border-bottom: 1px solid var(--border);
+            display:grid;
+            grid-template-columns:260px minmax(0,920px);
+            justify-content:start;
+            gap:88px;
+            padding:88px 48px;
+            border-bottom:1px solid var(--border);
+            transition:border-color .5s ease;
         }
 
         .c-lbl {
@@ -814,7 +821,7 @@
 
     <div class="fbar">
         <span class="fcopy">© 2026 Dhanishta — All thinking, some shipping.</span>
-        <div class="fopen"><span class="pdot" style="width:5px;height:5px;"></span> Open to Roles</div>
+        <div class="fopen" data-email="dhanishtalikhar06@gmail.com"><span class="pdot" style="width:5px;height:5px;"></span> <span class="fopen-label">Open to Roles</span></div>
     </div>
     <div id="clock"></div>
     <div id="toggle" style="position:fixed;"><span class="tsym ton" id="tmoon">☽</span><span class="tsym"

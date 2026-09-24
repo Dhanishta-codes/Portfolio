@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Govr System Build — Dhanishta Likhar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0A0A0A; --bg2: #111111; --surface: #1A1A1A; --border: #2A2A2A; --text: #F0EDE8; --text-muted: #666666; --text-dim: #3A3A3A; --accent: #E8D5B0; --accent2: #C8A96E; --green: #4ADE80; --font-display: 'Playfair Display', serif; --font-body: 'Cormorant Garamond', serif; --font-mono: 'DM Mono', monospace; }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 18px; line-height: 1.6; overflow-x: hidden; cursor: none; }
+  .cursor { position: fixed; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); mix-blend-mode: difference; }
+  .cursor-trail { position: fixed; width: 32px; height: 32px; border: 1px solid rgba(232,213,176,0.3); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 28px 48px; display: flex; justify-content: space-between; align-items: flex-start; }
+  .nav-brand { display: flex; flex-direction: column; }
+  .nav-name { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); text-decoration: none; }
+  .nav-sub { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; margin-top: 3px; }
+  .nav-items { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-muted); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; transition: color 0.3s ease; cursor: none; }
+  .nav-item:hover { color: var(--text); }
+  .nav-symbol { font-size: 12px; transition: transform 0.4s ease; }
+  .pulse-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; position: relative; display: inline-block; }
+  .pulse-dot::before, .pulse-dot::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: var(--green); animation: sonar 2.5s ease-out infinite; }
+  .pulse-dot::after { animation-delay: 1.25s; }
+  @keyframes sonar { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(4); opacity: 0; } }
+  .back-nav { padding: 120px 48px 0; }
+  .back-btn { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; color: var(--text-muted); text-decoration: none; text-transform: uppercase; display: flex; align-items: center; gap: 8px; transition: color 0.3s ease; cursor: none; }
+  .back-btn:hover { color: var(--accent); }
+  .page-header { padding: 60px 48px 80px; display: grid; grid-template-columns: 1fr auto; gap: 40px; border-bottom: 1px solid var(--border); }
+  .page-eyebrow { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; }
+  .page-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--text-muted); }
+  .page-title { font-family: var(--font-display); font-size: clamp(48px, 7vw, 96px); font-weight: 900; line-height: 0.95; margin-bottom: 24px; }
+  .page-subtitle { font-family: var(--font-body); font-style: italic; font-size: 20px; color: var(--text-muted); max-width: 560px; line-height: 1.5; }
+  .page-meta { text-align: right; }
+  .meta-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; }
+  .meta-value { font-family: var(--font-display); font-size: 20px; font-weight: 700; }
+  .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--surface); border-bottom: 1px solid var(--border); }
+  .stat { padding: 36px 40px; border-right: 1px solid var(--border); }
+  .stat:last-child { border-right: none; }
+  .stat-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; }
+  .stat-value { font-family: var(--font-display); font-size: 40px; font-weight: 900; color: var(--accent); }
+  .tags { padding: 28px 48px; display: flex; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+  .tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 7px 16px; border: 1px solid var(--border); color: var(--text-muted); }
+  .content-section { display: grid; grid-template-columns: 280px 1fr; gap: 80px; padding: 80px 48px; border-bottom: 1px solid var(--border); }
+  .content-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; display: flex; align-items: center; gap: 16px; padding-top: 4px; }
+  .content-label::before { content: ''; width: 24px; height: 1px; background: var(--text-muted); }
+  .content-body { font-size: 19px; line-height: 1.8; color: var(--text-muted); }
+  .content-body p { margin-bottom: 24px; }
+  .content-body p:last-child { margin-bottom: 0; }
+  .content-body strong { color: var(--accent); font-weight: 600; }
+  .cards { display: flex; flex-direction: column; gap: 16px; }
+  .card { background: var(--surface); padding: 28px 32px; display: grid; grid-template-columns: 48px 1fr; gap: 24px; align-items: start; border: 1px solid var(--border); transition: border-color 0.3s ease; }
+  .card:hover { border-color: var(--accent2); }
+  .card-num { font-family: var(--font-display); font-style: italic; font-size: 28px; color: var(--text-dim); }
+  .card-text { font-size: 17px; line-height: 1.7; color: var(--text-muted); }
+  .card-text strong { color: var(--text); }
+  .outcomes { display: flex; flex-direction: column; }
+  .outcome { padding: 24px 0; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 20px; font-size: 18px; line-height: 1.6; color: var(--text-muted); }
+  .outcome::before { content: '●'; color: var(--accent2); font-size: 8px; margin-top: 8px; flex-shrink: 0; }
+  .outcome strong { color: var(--accent); }
+  .next-case { padding: 80px 48px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); }
+  .next-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; }
+  .next-category { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; }
+  .next-title { font-family: var(--font-display); font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: var(--text); text-decoration: none; display: block; transition: color 0.3s ease; }
+  .next-title:hover { color: var(--accent); }
+  .back-link { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; color: var(--text-muted); text-decoration: none; text-transform: uppercase; border: 1px solid var(--border); padding: 12px 24px; transition: border-color 0.3s ease, color 0.3s ease; cursor: none; }
+  .back-link:hover { border-color: var(--accent); color: var(--accent); }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Detail-page frame: keeps non-index pages aligned to the metric-box width. */
+  :root { --page-max: 1120px; --page-pad: 48px; }
+  .back-nav,
+  .page-header,
+  .stats-bar,
+  .tags,
+  .disclaimer,
+  .content-section,
+  .next-case {
+    width: min(var(--page-max), calc(100% - var(--page-pad) * 2));
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .back-nav { padding: 120px 0 0; }
+  .page-header { padding: 60px 0 80px; align-items: end; }
+  .tags { padding: 24px 0; display: flex; gap: 12px; flex-wrap: wrap; border: none; border-bottom: 1px solid var(--border); border-radius: 0; overflow: visible; background: transparent; }
+  .tag { display: inline-flex; align-items: center; justify-content: center; min-height: auto; width: auto; text-align: center; padding: 7px 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 9px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
+  .tag + .tag { border-left: 1px solid var(--border); }
+  .disclaimer { padding: 18px 0; font-size: 12px; line-height: 1.6; letter-spacing: 0.08em; color: var(--text-muted); }
+  .content-section { grid-template-columns: 260px 1fr; gap: 76px; padding: 84px 0; }
+  .next-case { padding: 80px 0; }
+  @media (max-width: 860px) {
+    :root { --page-pad: 24px; }
+    body { cursor: auto; }
+    .cursor, .cursor-trail { display: none; }
+    .page-header, .content-section { grid-template-columns: 1fr; gap: 32px; }
+    .page-meta { text-align: left; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(2) { border-right: none; }
+    .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--border); }
+    .next-case { flex-direction: column; align-items: flex-start; gap: 32px; }
+  }
+  @media (max-width: 560px) {
+    :root { --page-pad: 18px; }
+    nav { padding: 22px 18px; }
+    .nav-items { display: none; }
+    .stats-bar { grid-template-columns: 1fr; }
+    .stat { border-right: none; border-bottom: 1px solid var(--border); }
+    .stat:last-child { border-bottom: none; }
+    .tags { display: flex; }
+    .tag + .tag { border-left: 1px solid var(--border); border-top: none; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+<nav>
+  <div class="nav-brand">
+    <a href="index.html" class="nav-name">Dhanishta Likhar</a>
+    <span class="nav-sub">Product & Strategy</span>
+  </div>
+  <div class="nav-items">
+    <a href="index.html" class="nav-item"><span class="nav-symbol">↗</span> Index</a>
+    <a href="teardowns.html" class="nav-item"><span class="nav-symbol">◎</span> What I Found</a>
+    <a href="index.html#contact" class="nav-item" style="color: var(--green);"><span class="pulse-dot"></span><span class="nav-symbol">●</span> Open to Roles</a>
+  </div>
+</nav>
+
+<div class="back-nav"><a href="index.html" class="back-btn">← Back</a></div>
+
+<div class="page-header reveal">
+  <div>
+    <div class="page-eyebrow">AI Architecture</div>
+    <h1 class="page-title">Govr System<br>Build</h1>
+    <p class="page-subtitle">An AI research co-pilot that prefers signal over volume.</p>
+  </div>
+  <div class="page-meta">
+    <div class="meta-label">Deployment</div>
+    <div class="meta-value">Live MVP</div>
+  </div>
+</div>
+
+<div class="stats-bar reveal">
+  <div class="stat"><div class="stat-label">Role</div><div class="stat-value">Solo</div></div>
+  <div class="stat"><div class="stat-label">Low-Grade Citations</div><div class="stat-value">−62%</div></div>
+  <div class="stat"><div class="stat-label">Eval Set Size</div><div class="stat-value">180</div></div>
+  <div class="stat"><div class="stat-label">Time to MVP</div><div class="stat-value">7 wks</div></div>
+</div>
+
+<div class="tags reveal">
+  <span class="tag">Product Spec</span>
+  <span class="tag">RAG Architecture</span>
+  <span class="tag">Eval Design</span>
+  <span class="tag">Zero-to-One</span>
+</div>
+
+<div class="content-section reveal">
+  <div class="content-label">(01) — Summary</div>
+  <div class="content-body">
+    <p>Govr is a zero-to-one AI system I designed and shipped solo — a retrieval-augmented workflow that prioritizes source quality and evidentiary weight over page count. <strong>Built to help analysts defend a thesis, not drown in tokens.</strong></p>
+  </div>
+</div>
+
+<div class="content-section reveal">
+  <div class="content-label">(02) — Problem</div>
+  <div class="content-body">
+    <p>Generic LLM research tools optimize for coverage. Analysts don't need more text; they need fewer, better citations. The problem is a product one: <strong>how do you design a loop that rejects low-quality retrieval even when it's cheap?</strong></p>
+  </div>
+</div>
+
+<div class="content-section reveal">
+  <div class="content-label">(03) — Approach</div>
+  <div class="cards">
+    <div class="card"><div class="card-num">01</div><div class="card-text">Wrote the product spec before touching a model — <strong>defined what 'quality' meant across five source types.</strong></div></div>
+    <div class="card"><div class="card-num">02</div><div class="card-text">Architected a multi-stage retrieval: breadth pass → source-grade re-ranker → evidence synthesis.</div></div>
+    <div class="card"><div class="card-num">03</div><div class="card-text">Built the eval harness first. <strong>No feature shipped without a regression on a hand-labeled set.</strong></div></div>
+    <div class="card"><div class="card-num">04</div><div class="card-text">Kept the UI deliberately text-first — the product is the reasoning trail, not the chat.</div></div>
+  </div>
+</div>
+
+<div class="content-section reveal">
+  <div class="content-label">(04) — Outcome</div>
+  <div class="outcomes">
+    <div class="outcome">MVP live and used by a small group of <strong>analysts and founders.</strong></div>
+    <div class="outcome">Source-quality re-ranker cut low-grade citations by <strong>~62% against baseline.</strong></div>
+    <div class="outcome">Shipped end-to-end as <strong>sole PM, architect and builder.</strong></div>
+  </div>
+</div>
+
+<div class="next-case reveal">
+  <div>
+    <div class="next-label">Next Case</div>
+    <div class="next-category">Distribution & GTM</div>
+    <a href="work-ihcl.html" class="next-title">The IHCL Strategy →</a>
+  </div>
+  <a href="index.html" class="back-link">← All Work</a>
+</div>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const trail = document.getElementById('cursorTrail');
+  let mouseX = 0, mouseY = 0, trailX = 0, trailY = 0;
+  document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; cursor.style.left = mouseX + 'px'; cursor.style.top = mouseY + 'px'; });
+  function animateTrail() { trailX += (mouseX - trailX) * 0.12; trailY += (mouseY - trailY) * 0.12; trail.style.left = trailX + 'px'; trail.style.top = trailY + 'px'; requestAnimationFrame(animateTrail); }
+  animateTrail();
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
