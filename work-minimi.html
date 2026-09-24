@@ -294,16 +294,6 @@
         <div class="cbody">
             <p>I ran ongoing calls alongside growth across existing users and new prospects: CEOs, PMs, ops leads, GTM leaders and developers. The assumed ICP was teams needing a shared PM/context tool.</p>
             <p>The real pattern was different: individuals whose actual pain was re-explaining their on-screen work to AI in every session. Across roles, nobody asked for better project tracking. They asked for AI that already knew what they were doing.</p>
-            <div class="quote-row" style="margin-top: 28px;">
-                <div class="quote">
-                    <p>“I just want the AI to know what I’m working on. I do not want to keep explaining the same context in every new chat.”</p>
-                    <footer>Ops lead, US</footer>
-                </div>
-                <div class="quote">
-                    <p>“I need it to remember what I was doing before I opened the app. That is the value, not a cleaner dashboard.”</p>
-                    <footer>Founder, India</footer>
-                </div>
-            </div>
             <p style="margin-top:28px;"><strong>The pattern:</strong> people were not asking for a better project tool. They were asking for AI that already knew what was on their screen.</p>
         </div>
     </div>
@@ -331,34 +321,6 @@
     </div>
 
     <div class="csec rev">
-        <div class="c-lbl"><span class="cl-dash" id="cl5"></span><span id="ct5"></span></div>
-        <div class="cbody">
-            <div class="flow">
-                <div class="flow-pane">
-                    <div class="flow-title">Before</div>
-                    <ul class="flow-list">
-                        <li>Set up workspace</li>
-                        <li>Add projects / tickets</li>
-                        <li>Invite the team</li>
-                        <li>Value only after setup</li>
-                    </ul>
-                </div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-pane">
-                    <div class="flow-title">After</div>
-                    <ul class="flow-list">
-                        <li>Install Mac app</li>
-                        <li>Grant screen access</li>
-                        <li>First AI answer already has context</li>
-                        <li>Value in the first session</li>
-                    </ul>
-                </div>
-            </div>
-            <p style="margin-top:28px;">The shift was simple but decisive: we moved from “setup the system” to “AI already knows what matters.” That is what made the product feel useful on day one.</p>
-        </div>
-    </div>
-
-    <div class="csec rev">
         <div class="c-lbl"><span class="cl-dash" id="cl6"></span><span id="ct6"></span></div>
         <div class="cbody">
             <div class="stats-bar" style="width:100%; max-width:none; margin:0 0 20px; grid-template-columns:repeat(3,1fr);">
@@ -375,9 +337,8 @@
                     <div class="s-val">57%</div>
                 </div>
             </div>
-            <p><strong>Headline:</strong> 10 paying users a month → 850+ in one summer.</p>
-            <p><strong>Cause → effect:</strong> new ICP → pitch landed first try → 57% onboarded-to-paid. Better onboarding → value moved to the first session → churn cut from 30% to 15%. Rebrand + narrative → two Product Hunt launches at #2 with zero paid spend. Global-first positioning → 25+ countries.</p>
-            <p style="font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); margin-top: 20px;">Ownership line: ICP, narrative, onboarding and 1,500+ onboardings were mine. Rebrand call was the founders’, driven by my research.</p>
+            <p>Paying users grew from 10 a month to 850+ over one summer. The new ICP made the pitch land on the first try, contributing to a 57% onboarded-to-paid rate. Moving value into the first session helped reduce churn from 30% to 15%.</p>
+            <p>The rebrand and new narrative supported two Product Hunt launches at #2 with zero paid spend, while global-first positioning brought users from 25+ countries. I owned the ICP research, narrative, onboarding work and 1,500+ onboardings; the founders made the final rebrand call based on that research.</p>
         </div>
     </div>
 
@@ -388,15 +349,6 @@
             <div class="outcome"><strong>Metric to watch:</strong> week-4 retention by segment, especially solo vs team users.</div>
             <div class="outcome"><strong>Mistake to fix:</strong> we were not instrumenting activation early enough, so before/after activation is still hard to prove. That needs to be tracked from day 1.</div>
         </div>
-    </div>
-
-    <div class="next-case rev">
-        <div>
-            <div class="nc-lbl">Next Case</div>
-            <div class="nc-cat">AI Architecture</div>
-            <a href="work-govr.html" class="nc-ttl">Govr System Build →</a>
-        </div>
-        <a href="index.html" class="back-link">← All Work</a>
     </div>
 
     <div class="next-case rev">
@@ -436,9 +388,8 @@
             { d: 'cl2', t: 'ct2', l: '(02) — THE PROBLEM' },
             { d: 'cl3', t: 'ct3', l: '(03) — THE INSIGHT' },
             { d: 'cl4', t: 'ct4', l: '(04) — DECISIONS' },
-            { d: 'cl5', t: 'ct5', l: '(05) — ONBOARDING' },
-            { d: 'cl6', t: 'ct6', l: '(06) — IMPACT' },
-            { d: 'cl7', t: 'ct7', l: '(07) — WHAT I WOULD DO NEXT' }
+            { d: 'cl6', t: 'ct6', l: '(05) — IMPACT' },
+            { d: 'cl7', t: 'ct7', l: '(06) — WHAT I WOULD DO NEXT' }
         ];
         clabels.forEach(({ d, t, l }) => { const dash = document.getElementById(d), txt = document.getElementById(t); const sec = dash.closest('.csec'); new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting && !dash.dataset.p) { dash.dataset.p = '1'; dash.classList.add('open'); setTimeout(() => { let i = 0; const iv = setInterval(() => { txt.textContent += l[i]; i++; if (i >= l.length) clearInterval(iv); }, 30); }, 300); } }); }, { threshold: .4 }).observe(sec); });
 
