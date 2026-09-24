@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>minimi — Dhanishta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=DM+Mono:ital,wght@0,300;0,400;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root,
+        [data-theme="dark"] {
+            --bg: #0A0A0A;
+            --bg2: #111111;
+            --surface: #1A1A1A;
+            --border: #2A2A2A;
+            --text: #F5F5F5;
+            --text-muted: #a6a6a6;
+            --text-dim: #7d7d7d;
+            --accent: #D97744;
+            --accent2: #B85C1A;
+            --green: #4ADE80;
+            --green-glow: rgba(74, 222, 128, .12);
+            --font-display: 'Instrument Serif', serif;
+            --font-body: 'Lora', serif;
+            --font-ui: 'Inter', sans-serif;
+            --font-mono: 'DM Mono', monospace;
+        }
+
+        [data-theme="light"] {
+            --bg: #EFEDEA;
+            --bg2: #E8E5E1;
+            --surface: #DDD9D4;
+            --border: #C8C3BC;
+            --text: #1A1A1A;
+            --text-muted: #57514d;
+            --text-dim: #7c736d;
+            --accent: #B85C1A;
+            --accent2: #8B4010;
+            --green: #2D7A4F;
+            --green-glow: rgba(45, 122, 79, .12);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-ui);
+            font-size: 18px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            cursor: none;
+            transition: background .8s ease, color .5s ease;
+        }
+        a { text-decoration: none; color: inherit; cursor: none; }
+        img { max-width: 100%; display: block; }
+
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 28px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            background: rgba(10,10,10,.85);
+            backdrop-filter: blur(8px);
+        }
+        [data-theme="light"] nav { background: rgba(239,237,234,.85); }
+        .nav-logo { display: flex; flex-direction: column; }
+        .nav-name {
+            font-family: "Times New Roman", Georgia, serif;
+            font-size: 18px; font-weight: 700; letter-spacing: 0; color: var(--text);
+        }
+        .nav-subtitle { display:block; font-family: var(--font-body); font-size: 13px; font-weight: 400; letter-spacing: .015em; color: var(--text-muted); font-style: italic; margin-top: 2px; }
+        .nav-items { display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+        .nav-item {
+            display:flex; align-items:center; gap:10px;
+            font-family: var(--font-ui); font-size:10px; font-weight:500; letter-spacing:.15em; text-transform:uppercase; color:var(--text-muted); position:relative;
+        }
+        .nav-item::after { content:''; position:absolute; bottom:-2px; right:0; width:0; height:1px; background:var(--accent); transition:width .3s ease; }
+        .nav-item:hover::after { width:100%; }
+        .n-sym { font-size:11px; display:inline-block; transition:transform .4s ease; }
+        .nav-roles { color: var(--green)!important; }
+        .nav-roles::after { background: var(--green); }
+        .n-roles-txt { animation: breathe 3s ease-in-out infinite; }
+        @keyframes breathe { 0%,100% { opacity:1; } 50% { opacity:.85; text-shadow: 0 0 20px var(--green), 0 0 40px var(--green-glow); }}
+        .pdot { width:7px; height:7px; background: var(--green); border-radius:50%; position:relative; display:inline-block; }
+        .pdot::before, .pdot::after { content:''; position:absolute; inset:0; border-radius:50%; background:var(--green); animation: sonar 2.5s ease-out infinite; }
+        .pdot::after { animation-delay: 1.25s; }
+        @keyframes sonar { 0% { transform:scale(1); opacity:.8; } 100% { transform:scale(4); opacity:0; } }
+
+        .back-nav { padding: 120px 48px 0; }
+        .back-btn { font-family: var(--font-ui); font-size: 10px; font-weight:500; letter-spacing:.15em; text-transform:uppercase; color:var(--text-muted); display:inline-flex; align-items:center; gap:8px; }
+        .back-btn:hover { color: var(--accent); gap: 4px; }
+
+        .pg-hdr {
+            padding: 60px 48px 80px; display:grid; grid-template-columns: 1fr auto; gap:40px; align-items:end; border-bottom:1px solid var(--border);
+        }
+        .pg-eye { display:flex; align-items:center; gap:0; font-family:var(--font-ui); font-size:9px; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--text-muted); margin-bottom:20px; }
+        .pe-dash { display:inline-block; width:0; height:1px; background: var(--text-muted); vertical-align:middle; transition: width .35s ease, margin-right .35s ease; }
+        .pe-dash.open { width: 32px; margin-right: 14px; }
+        .pg-title { font-family: var(--font-display); font-size: clamp(48px, 7vw, 96px); font-weight: 400; line-height: .95; margin-bottom: 20px; color: var(--text); }
+        .pg-sub { font-family: var(--font-body); font-style: italic; font-size: 20px; color: var(--text-muted); max-width: 640px; line-height:1.5; }
+        .pg-meta { text-align:right; }
+        .m-lbl { font-family: var(--font-ui); font-size: 9px; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color: var(--text-dim); margin-bottom:8px; }
+        .m-val { font-family: var(--font-display); font-size: 24px; color: var(--text); }
+
+        .stats-bar {
+            display:grid; grid-template-columns: repeat(4,1fr); background: var(--surface); border:1px solid var(--border); width: calc(100% - 96px); max-width: 1760px; margin: 32px auto 0; overflow:hidden;
+        }
+        .stat { padding: 36px 40px; border-right:1px solid var(--border); }
+        .stat:last-child { border-right:none; }
+        .s-lbl { font-family: var(--font-ui); font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px; }
+        .s-val { font-family: var(--font-display); font-size: 40px; color: var(--accent); line-height:1; }
+
+        .tag-row { display:grid; grid-template-columns: repeat(5,1fr); border:1px solid var(--border); border-top:none; width: calc(100% - 96px); max-width:1120px; margin:0 auto; }
+        .tag { display:flex; align-items:center; justify-content:center; padding:18px 12px; font-size:10px; letter-spacing:.14em; text-transform:uppercase; border-right:1px solid var(--border); color:var(--text-muted); }
+        .tag:last-child { border-right:none; }
+
+        .csec {
+            display:grid; grid-template-columns:260px minmax(0,920px); justify-content:start; gap:88px; padding:88px 48px; border-bottom:1px solid var(--border);
+        }
+        .c-lbl { display:flex; align-items:center; gap:0; font-family:var(--font-ui); font-size:9px; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--text-muted); padding-top:4px; }
+        .cl-dash { display:inline-block; width:0; height:1px; background:var(--text-muted); transition: width .35s ease, margin-right .35s ease; }
+        .cl-dash.open { width:24px; margin-right:12px; }
+        .cbody { font-family: var(--font-body); font-size: 19px; line-height: 1.8; color: var(--text-muted); }
+        .cbody p { margin-bottom: 24px; }
+        .cbody p:last-child { margin-bottom:0; }
+        .cbody strong { color: var(--text); font-weight: 500; }
+        .cbody em { font-style: italic; color: var(--accent); }
+
+        .cards { display:flex; flex-direction:column; gap:16px; }
+        .card {
+            background: var(--surface); border: 1px solid var(--border); border-left: 3px solid transparent; padding: 28px 32px; display:grid; grid-template-columns:48px 1fr; gap:24px; align-items:start;
+        }
+        .card:hover { border-left-color: var(--accent); }
+        .card-n { font-family: var(--font-display); font-style:italic; font-size:28px; color: var(--text-dim); line-height:1; }
+        .card-t { font-family: var(--font-body); font-size:17px; line-height:1.7; color: var(--text-muted); }
+        .card-t strong { color: var(--text); }
+
+        .quote-row { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 24px; }
+        .quote { background: var(--surface); border:1px solid var(--border); padding: 28px 24px; }
+        .quote p { font-family: var(--font-body); font-size: 17px; line-height:1.8; color: var(--text-muted); }
+        .quote footer { margin-top:16px; font-family:var(--font-ui); font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--text-dim); }
+
+        .flow {
+            display:grid; grid-template-columns: 1fr auto 1fr; gap: 24px; align-items:center; padding-top: 8px;
+        }
+        .flow-pane {
+            background: var(--surface); border:1px solid var(--border); padding:24px; min-height: 180px;
+        }
+        .flow-title { font-family: var(--font-ui); font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--text-dim); margin-bottom:18px; }
+        .flow-list { list-style: none; display:flex; flex-direction:column; gap:12px; }
+        .flow-list li { font-family:var(--font-body); font-size:17px; color:var(--text-muted); }
+        .flow-arrow { font-size: 32px; color: var(--accent); }
+
+        .compare-table { width:100%; border-collapse:collapse; border:1px solid var(--border); background: var(--surface); }
+        .compare-table th, .compare-table td { border-bottom:1px solid var(--border); padding: 18px 20px; text-align:left; vertical-align:top; }
+        .compare-table th { font-family: var(--font-ui); font-size:10px; letter-spacing:.15em; text-transform:uppercase; color: var(--text-dim); }
+        .compare-table td { font-family: var(--font-body); font-size: 18px; color: var(--text-muted); }
+        .compare-table tr:last-child th, .compare-table tr:last-child td { border-bottom:none; }
+
+        .outcomes { display:flex; flex-direction:column; }
+        .outcome { padding: 24px 0; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:20px; font-family: var(--font-body); font-size:18px; line-height:1.6; color: var(--text-muted); }
+        .outcome::before { content:'●'; font-family: var(--font-ui); font-size:7px; color: var(--accent2); margin-top:9px; flex-shrink:0; }
+        .outcome strong { color: var(--accent); font-weight:500; }
+
+        .next-case { padding:80px 48px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); }
+        .nc-lbl { font-family: var(--font-ui); font-size:9px; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px; }
+        .nc-cat { font-family: var(--font-ui); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
+        .nc-ttl { font-family: var(--font-display); font-size: clamp(26px, 3.5vw, 46px); color: var(--text); display:block; }
+        .back-link { font-family:var(--font-ui); font-size:10px; font-weight:500; letter-spacing:.15em; text-transform:uppercase; color:var(--text-muted); border:1px solid var(--border); padding:12px 24px; }
+
+        .fbar { border-top:1px solid var(--border); padding: 24px 48px; display:flex; justify-content:space-between; align-items:center; }
+        .fcopy { font-family: var(--font-ui); font-size:9px; font-weight:400; letter-spacing:.15em; text-transform:uppercase; color:var(--text-dim); }
+        .fopen { font-family: var(--font-ui); font-size:9px; font-weight:500; letter-spacing:.15em; text-transform:uppercase; color: var(--green); display:flex; align-items:center; gap:8px; }
+        .pdot { width: 7px; height:7px; background: var(--green); border-radius:50%; position: relative; display:inline-block; }
+
+        .rev { opacity:0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
+        .rev.on { opacity:1; transform:none; }
+
+        @media (max-width: 900px) {
+            nav { padding: 22px 22px; }
+            .back-nav { padding: 100px 22px 0; }
+            .pg-hdr { padding: 32px 22px 48px; grid-template-columns:1fr; }
+            .pg-meta { text-align:left; }
+            .stats-bar { width: calc(100% - 44px); grid-template-columns: repeat(2,1fr); }
+            .tag-row { width: calc(100% - 44px); grid-template-columns: repeat(2,1fr); }
+            .csec { grid-template-columns:1fr; gap:20px; padding: 60px 22px; }
+            .quote-row { grid-template-columns:1fr; }
+            .flow { grid-template-columns:1fr; }
+            .next-case { flex-direction:column; align-items:flex-start; gap:20px; padding:60px 22px; }
+            .fbar { padding: 24px 22px; flex-direction: column; align-items:flex-start; gap:12px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cursor"></div>
+    <div id="cursorTrail"></div>
+    <nav>
+        <div class="nav-logo">
+            <a href="index.html" class="nav-name">Dhanishta<span class="nav-subtitle">– Product & Strategy</span></a>
+        </div>
+        <div class="nav-items">
+            <a href="index.html" class="nav-item"><span class="n-sym">↗</span> Index</a>
+            <a href="index.html#teardowns" class="nav-item"><span class="n-sym">↗</span> What I Found</a>
+            <a href="index.html#contact" class="nav-item nav-roles"><span class="pdot"></span><span class="n-roles-txt">Open to Roles</span></a>
+        </div>
+    </nav>
+
+    <div class="back-nav"><a href="index.html" class="back-btn">← Back</a></div>
+
+    <div class="pg-hdr rev">
+        <div>
+            <div class="pg-eye"><span class="pe-dash" id="peDash"></span><span id="peText"></span></div>
+            <h1 class="pg-title">One ICP shift turned a PM tool into Minimi: 850+ paying users in 25+ countries</h1>
+            <p class="pg-sub">A product and growth internship story about finding the market that actually wanted the product.</p>
+        </div>
+        <div class="pg-meta">
+            <div class="m-lbl">Role</div>
+            <div class="m-val">Product & growth intern<br>ICP research, onboarding, launch</div>
+        </div>
+    </div>
+
+    <div class="stats-bar rev">
+        <div class="stat">
+            <div class="s-lbl">Paying users</div>
+            <div class="s-val">850+</div>
+        </div>
+        <div class="stat">
+            <div class="s-lbl">Countries</div>
+            <div class="s-val">25+</div>
+        </div>
+        <div class="stat">
+            <div class="s-lbl">Onboarded → paid</div>
+            <div class="s-val">57%</div>
+        </div>
+        <div class="stat">
+            <div class="s-lbl">Time-to-value</div>
+            <div class="s-val">&lt; 3 min</div>
+        </div>
+    </div>
+
+    <div class="tag-row rev">
+        <span class="tag">Consumer AI</span>
+        <span class="tag">ICP Research</span>
+        <span class="tag">Onboarding</span>
+        <span class="tag">Launch</span>
+        <span class="tag">Product Growth</span>
+    </div>
+
+    <div class="csec rev">
+        <div class="c-lbl"><span class="cl-dash" id="cl1"></span><span id="ct1"></span></div>
+        <div class="cbody">
+            <p>Minimi is private, on-device memory for Claude. It remembers your work context so you stop re-explaining yourself across tabs, tools and meetings.</p>
+            <p>Before the shift, it was positioned as a project-management or context tool. That looked clean on paper, but it missed the actual job-to-be-done for the people who were adopting it fastest.</p>
+        </div>
+    </div>
+
+    <div class="csec rev">
+        <div class="c-lbl"><span class="cl-dash" id="cl2"></span><span id="ct2"></span></div>
+        <div class="cbody">
+            <p>Before the pivot, the product was stuck in the middle: more interest than traction, but not enough repeat usage after day 1. The launch window was short and the wrong ICP was burning runway.</p>
+            <p><strong>Why it mattered:</strong> the team had a narrow pre-launch window and no time to keep optimizing for the wrong buyer. We needed clarity, not another feature.</p>
+        </div>
+    </div>
+
+    <div class="csec rev">
+        <div class="c-lbl"><span class="cl-dash" id="cl3"></span><span id="ct3"></span></div>
+        <div class="cbody">
+            <p>I talked to 40+ users across founders, PMs, ops leads, and developers. The assumed ICP was “PMs managing projects.” The real pattern was very different: heavy Claude users losing context across tools every single day.</p>
+            <p>People didn't want a PM tool. They wanted Claude to already know what was on their screen and what they had been doing before. That changed the framing of the entire product.</p>
+            <div class="quote-row" style="margin-top: 28px;">
+                <div class="quote">
+                    <p>“I don’t need another dashboard. I need a system that remembers my context so I don’t have to explain my work from scratch every time.”</p>
+                    <footer>Ops lead, US</footer>
+                </div>
+                <div class="quote">
+                    <p>“If it remembers what I’m looking at, it becomes useful immediately. If it asks me to set up projects first, it feels like work.”</p>
+                    <footer>Founder, India</footer>
+                </div>
+            </div>
+            <p style="margin-top:28px;"><strong>Aha:</strong> the real pain was not project management — it was context loss, repeated explanation, and slower AI output.</p>
+        </div>
+    </div>
+
+    <div class="csec rev">
+        <div class="c-lbl"><span class="cl-dash" id="cl4"></span><span id="ct4"></span></div>
+        <div class="cards">
+            <div class="card">
+                <div class="card-n">01</div>
+                <div class="card-t"><strong>Rebrand:</strong> from a work-tool-sounding name to Minimi, positioned around memory instead of management. The new name matched a use case people instantly understood.</div>
+            </div>
+            <div class="card">
+                <div class="card-n">02</div>
+                <div class="card-t"><strong>Onboarding reset:</strong> stripped down setup, removed project configuration upfront, and changed the first interaction from “create workspaces” to “capture context fast.”</div>
+            </div>
+            <div class="card">
+                <div class="card-n">03</div>
+                <div class="card-t"><strong>Feature shipped:</strong> an on-screen context layer powered by MCP so the product could understand what a user was working on, without friction.</div>
+            </div>
+            <div class="card">
+                <div class="card-n">04</div>
+                <div class="card-t"><strong>Tradeoff:</strong> we intentionally dropped broader PM features that some existing users liked, because a sharper focus was the only way to win the real customer.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="csec rev">
+        <div class="c-lbl"><span class="cl-dash" id="cl5"></span><span id="ct5"></span></div>
+        <div class="cbody">
+            <div class="flow">
+                <div class="flow-pane">
+                    <div class="flow-title">Before</div>
+                    <ul class="flow-list">
+                        <li>Sign up</li>
+                        <li>Create project</li>
+                        <li>Connect tools</li>
+                        <li>Set context manually</li>
+                    </ul>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-pane">
+                    <div class="flow-title">After</div>
+                    <ul class="flow-list">
+                        <li>Open the app</li>
+                        <li>Let it capture context</li>
+                        <li>Use instantly</li>
+                        <li>Get value in under 3 min</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="margin-top:28px;">The first flow asked people to do labor before they saw value. The second made memory the value itself.</p>
+        </div>
+    </div>
+
+    <div class="csec rev">
+        <div class="c-lbl"><span class="cl-dash" id="cl6"></span><span id="ct6"></span></div>
+        <div class="cbody">
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Before</th>
+                        <th>After</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Users onboarded</td>
+                        <td>~x</td>
+                        <td>1,500+</td>
+                    </tr>
+                    <tr>
+                        <td>Paying users</td>
+                        <td>x</td>
+                        <td>850+</td>
+                    </tr>
+                    <tr>
+                        <td>Activation</td>
+                        <td>x%</td>
+                        <td>~57%</td>
+                    </tr>
+                    <tr>
+                        <td>Countries</td>
+                        <td>x</td>
+                        <td>25+</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top:28px;">Attribution was shared: the ICP shift and onboarding fix drove activation; the onboarding and personal outreach drove the paid conversion; the new feature helped retention; the launch amplified reach.</p>
+        </div>
+    </div>
+
+    <div class="csec rev">
+        <div class="c-lbl"><span class="cl-dash" id="cl7"></span><span id="ct7"></span></div>
+        <div class="outcomes">
+            <div class="outcome">The biggest unlock was not a better feature list; it was <strong>matching the real pain.</strong></div>
+            <div class="outcome">ICP shift + onboarding redesign improved activation more than any standalone feature could.</div>
+            <div class="outcome">We learned to move earlier from interviews to product decisions, before shipping an architecture around the wrong problem.</div>
+        </div>
+    </div>
+
+    <div class="next-case rev">
+        <div>
+            <div class="nc-lbl">Next Case</div>
+            <div class="nc-cat">AI Architecture</div>
+            <a href="work-govr.html" class="nc-ttl">Govr System Build →</a>
+        </div>
+        <a href="index.html" class="back-link">← All Work</a>
+    </div>
+
+    <div class="fbar">
+        <span class="fcopy">© 2026 Dhanishta — All thinking, some shipping.</span>
+        <div class="fopen"><span class="pdot" style="width:5px;height:5px;"></span> Open to Roles</div>
+    </div>
+
+    <div id="clock"></div>
+    <div id="toggle" style="position:fixed;"><span class="tsym ton" id="tmoon">☽</span><span class="tsym" id="tsun">☀</span><span id="tind"></span></div>
+
+    <script>
+        const C = document.getElementById('cursor'), T = document.getElementById('cursorTrail');
+        let mx = 0, my = 0, tx = 0, ty = 0;
+        document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; C.style.left = mx + 'px'; C.style.top = my + 'px'; });
+        (function lp() { tx += (mx - tx) * .12; ty += (my - ty) * .12; T.style.left = tx + 'px'; T.style.top = ty + 'px'; requestAnimationFrame(lp); })();
+
+        document.querySelectorAll('.nav-item').forEach(it => { const s = it.querySelector('.n-sym'); if (!s) return; it.addEventListener('mouseenter', () => s.style.transform = 'rotate(360deg)'); it.addEventListener('mouseleave', () => s.style.transform = 'rotate(0deg)'); });
+
+        const ro = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); }), { threshold: .08 });
+        document.querySelectorAll('.rev').forEach(el => ro.observe(el));
+
+        const pe = document.getElementById('peDash');
+        const pgHdr = document.querySelector('.pg-hdr');
+        new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting && !pe.dataset.p) { pe.dataset.p = '1'; pe.classList.add('open'); setTimeout(() => { let i = 0, label = 'CONSUMER AI / PRODUCT', txt = document.getElementById('peText'); const iv = setInterval(() => { txt.textContent += label[i]; i++; if (i >= label.length) clearInterval(iv); }, 35); }, 360); } }); }, { threshold: .3 }).observe(pgHdr);
+
+        const clabels = [
+            { d: 'cl1', t: 'ct1', l: '(01) — CONTEXT' },
+            { d: 'cl2', t: 'ct2', l: '(02) — THE PROBLEM' },
+            { d: 'cl3', t: 'ct3', l: '(03) — THE INSIGHT' },
+            { d: 'cl4', t: 'ct4', l: '(04) — DECISIONS' },
+            { d: 'cl5', t: 'ct5', l: '(05) — ONBOARDING' },
+            { d: 'cl6', t: 'ct6', l: '(06) — IMPACT' },
+            { d: 'cl7', t: 'ct7', l: '(07) — WHAT I WOULD DO NEXT' }
+        ];
+        clabels.forEach(({ d, t, l }) => { const dash = document.getElementById(d), txt = document.getElementById(t); const sec = dash.closest('.csec'); new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting && !dash.dataset.p) { dash.dataset.p = '1'; dash.classList.add('open'); setTimeout(() => { let i = 0; const iv = setInterval(() => { txt.textContent += l[i]; i++; if (i >= l.length) clearInterval(iv); }, 30); }, 300); } }); }, { threshold: .4 }).observe(sec); });
+
+        const ck = document.getElementById('clock');
+        function upCk() { const n = new Date(); const h = n.getHours(); const m = String(n.getMinutes()).padStart(2, '0'); const s = String(n.getSeconds()).padStart(2, '0'); const ap = h >= 12 ? 'PM' : 'AM'; const h2 = String(h % 12 || 12).padStart(2, '0'); ck.textContent = `${h2}:${m}:${s} ${ap} IST`; }
+        upCk(); setInterval(upCk, 1000);
+
+        const tog = document.getElementById('toggle'), moon = document.getElementById('tmoon'), sun = document.getElementById('tsun'), ind = document.getElementById('tind');
+        let dark = localStorage.getItem('theme') !== 'light';
+        function applyTheme() { document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light'); moon.classList.toggle('ton', dark); sun.classList.toggle('ton', !dark); setTimeout(() => { ind.style.left = (dark ? moon.offsetLeft : sun.offsetLeft) + 'px'; }, 10); }
+        applyTheme();
+        tog.addEventListener('click', () => { dark = !dark; localStorage.setItem('theme', dark ? 'dark' : 'light'); applyTheme(); });
+    </script>
+</body>
+</html>
